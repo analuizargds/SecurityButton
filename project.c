@@ -6,7 +6,6 @@
 #include "pico/binary_info.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
-#include "hardware/adc.h"
 #include "hardware/i2c.h"
 #include "inc/ssd1306.h"
 
@@ -17,7 +16,6 @@
 #define LED_VERMELHO 13    // LED para emergência
 #define LED_AZUL 12        // LED para estado de espera
 #define BUZZER_A 21        // Buzzer principal para alertas
-#define MIC_PIN 28         // Entrada analógica do microfone
 
 // Definições do OLED
 const uint I2C_SDA = 14;
@@ -26,7 +24,6 @@ const uint I2C_SCL = 15;
 // Configuração dos tempos
 #define TEMPO_LIMITE 30000 // 30 segundos antes da contagem regressiva
 #define CONTAGEM_REGRESSIVA 10000 // 10 segundos de contagem regressiva
-#define MIC_LIMIAR 40000 // Limiar para detecção de som alto
 
 // Configurações do buzzer
 #define FREQ_BASE 500      // Frequência base para o buzzer
@@ -146,9 +143,6 @@ int main() {
     gpio_set_function(BUZZER_A, GPIO_FUNC_PWM);
     pwm_set_wrap(pwm_gpio_to_slice_num(BUZZER_A), 62500);
     pwm_set_enabled(pwm_gpio_to_slice_num(BUZZER_A), true);
-
-    adc_init();
-    adc_gpio_init(MIC_PIN);
 
     while (1) {
         printf("Aguardando ação...\n");
